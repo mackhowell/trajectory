@@ -67,7 +67,12 @@ public class MainActivity extends Activity implements SensorEventListener {
 			}
 			break;
 		case Sensor.TYPE_LIGHT:
-			
+			float lux = event.values[0];
+//			Log.v("LIGHT", "LIGHT: " + lux);
+			if (lux > 600) {
+				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
+				toast.show();
+			}
 			break;
 		}
 	}
