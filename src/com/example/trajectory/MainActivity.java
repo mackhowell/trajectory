@@ -17,7 +17,8 @@ public class MainActivity extends Activity implements SensorEventListener {
 
 	private SensorManager sensorManager;
 	private Sensor accelerometerSensor;
-
+	private Sensor lightSensor;
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
 		Log.v("onCreate", "INSIDE ONCREATE");
@@ -26,11 +27,13 @@ public class MainActivity extends Activity implements SensorEventListener {
         
         sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 		accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+		lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		
-		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
-			for (Sensor sensor : sensors) {
-		        Log.v("Sensors", "" + sensor.getName());
-		    }
+		//List all avail sensors
+//		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+//			for (Sensor sensor : sensors) {
+//		        Log.v("Sensors", "" + sensor.getName());
+//		    }
     }
 	
 	@Override
@@ -38,6 +41,7 @@ public class MainActivity extends Activity implements SensorEventListener {
 		Log.v("onResume", "INSIDE ONRESUME");
 		super.onResume();
 		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 	}	
 
 	@Override 
@@ -55,9 +59,16 @@ public class MainActivity extends Activity implements SensorEventListener {
 //		Log.v("Accel","Y: " + event.values[1]);
 //		Log.v("Accel","Z: " + event.values[2]);
 		
-		if (event.values[2] >= 6)  {
-			Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
-			toast.show();
+		switch (event.sensor.getType()) {
+		case Sensor.TYPE_LINEAR_ACCELERATION:
+			if (event.values[2] >= 6)  {
+				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
+				toast.show();
+			}
+			break;
+		case Sensor.TYPE_LIGHT:
+			
+			break;
 		}
 	}
 }
