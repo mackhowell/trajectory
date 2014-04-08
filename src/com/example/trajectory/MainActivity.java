@@ -1,9 +1,9 @@
 package com.example.trajectory;
 
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,6 +11,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+import android.view.View;
 
 
 public class MainActivity extends Activity implements SensorEventListener {
@@ -55,23 +56,38 @@ public class MainActivity extends Activity implements SensorEventListener {
 	}
 
 	public void onSensorChanged(SensorEvent event) {
-//		Log.v("Accel","X: " + event.values[0]);
-//		Log.v("Accel","Y: " + event.values[1]);
-//		Log.v("Accel","Z: " + event.values[2]);
+		
+        //Initial RED Background
+        View view = this.getWindow().getDecorView();
 		
 		switch (event.sensor.getType()) {
+		
 		case Sensor.TYPE_LINEAR_ACCELERATION:
+//			Log.v("Accel","Z: " + event.values[2]);
 			if (event.values[2] >= 6)  {
-				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
-				toast.show();
+				
+//				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
+//				toast.show();
+				
+				view.setBackgroundColor(Color.GREEN);
+			}
+			else {
+				view.setBackgroundColor(Color.RED);
 			}
 			break;
+		
 		case Sensor.TYPE_LIGHT:
 			float lux = event.values[0];
 //			Log.v("LIGHT", "LIGHT: " + lux);
 			if (lux > 600) {
-				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
-				toast.show();
+				
+//				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
+//				toast.show();
+				
+				view.setBackgroundColor(Color.GREEN);
+			}
+			else {
+				view.setBackgroundColor(Color.RED);
 			}
 			break;
 		}
