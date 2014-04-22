@@ -1,11 +1,18 @@
 package com.example.trajectory;
 
+import java.util.List;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -16,7 +23,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-public class SensorService extends Service {
+public class SensorService extends Service implements SensorEventListener {
 	public static final int INTERVAL = 5000; //5 secs
 	public static final int FIRST_RUN = 5000; //5 secs
 	int REQUEST_CODE = 11223344;
@@ -27,6 +34,10 @@ public class SensorService extends Service {
 	private View myView;
 	private WindowManager.LayoutParams myParams;
 	private WindowManager myWindowManager;
+	
+	// SENSOR MANAGER
+	private SensorManager sensorManager;
+	private Sensor accelerometerSensor;
 	
 	@Override
 	public void onCreate() {
@@ -47,6 +58,17 @@ public class SensorService extends Service {
 	    myParams.setTitle("Window test");
 	    myWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
 	    myWindowManager.addView(myView, myParams);
+	    
+		// SENSOR MANAGER + REGISTER LISTENER!!!
+		sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+		accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		
+		//List all avail sensors
+		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
+			for (Sensor sensor : sensors) {
+		        Log.v("Sensors", "" + sensor.getName());
+		    }
 	}
 	
 	@Override
@@ -67,6 +89,9 @@ public class SensorService extends Service {
 		// destroy alarm manager
 		((WindowManager)getSystemService(WINDOW_SERVICE)).removeView(myView);
 	    myView = null;
+	    
+	    // deregister LISTENER!
+	    sensorManager.unregisterListener(this);
 	}
 	
 	private void startService() {
@@ -85,7 +110,34 @@ public class SensorService extends Service {
 		Toast.makeText(this, "Service Started.", Toast.LENGTH_SHORT).show();
 		Log.v(this.getClass().getName(), "AlarmManager started at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
 	}
+
 	
+	// HERE THEY ARE!
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+    	Log.v("SENSOR CHANGED", "IM INSIDE SENSOR CHANGED FUNCTION!!!");
+		switch (event.sensor.getType()) {
+		case Sensor.TYPE_LINEAR_ACCELERATION:
+			Log.v("Accel","Z: " + event.values[2]);
+			if (event.values[2] >= 6)  {
+//				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
+//				toast.show();
+			}
+			else {
+			}
+			break;
+		}
+//        ServicesDemo.refreshDisplay();
+		
+	}
+	
+
 	public class MyLoadView extends View {
 
 	    private Paint mPaint;
@@ -118,5 +170,34 @@ public class SensorService extends Service {
 	        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 	    }
 	}
+	
+	
+	
+	
+	
+//	class MyListener implements SensorEventListener {
+//
+//		@Override
+//		public void onAccuracyChanged(Sensor sensor, int accuracy) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void onSensorChanged(SensorEvent event) {
+//			switch (event.sensor.getType()) {
+//			case Sensor.TYPE_LINEAR_ACCELERATION:
+////				Log.v("Accel","Z: " + event.values[2]);
+//				if (event.values[2] >= 6)  {
+////					Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
+////					toast.show();
+//				}
+//				else {
+//				}
+//				break;
+//			}
+//			
+//		}
+//	}
 
 }
