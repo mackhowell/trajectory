@@ -3,6 +3,7 @@ package com.example.trajectory;
 import java.util.List;
 
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -85,21 +86,30 @@ public class SensorService extends Service implements SensorEventListener {
 		
 		Log.v("SensorService","HI FROM startService()!!!");
 		
-		// Stuff for alarmManager
+		// setup Intent for alarmManager
 		Intent intent = new Intent(this, RepeatingAlarmServiceTester.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
 		
-		// DO IT ONCE FOR TESTING STREAM...NOT REPEATING
+		// REPEATING ALARM SENDER
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
 				SystemClock.elapsedRealtime() + FIRST_RUN,
 				INTERVAL,
 				pendingIntent);
 		
-		Log.v("SensorService","JUST SET ALARM MANAGER!");
-		
 		Toast.makeText(this, "Service Started.", Toast.LENGTH_SHORT).show();
 		Log.v(this.getClass().getName(), "AlarmManager started at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
+		
+
+//		// launches the new activity StreamActivity.java
+//		Intent streamintent = new Intent();
+//		streamintent.setAction(Intent.ACTION_MAIN);
+//		streamintent.addCategory(Intent.CATEGORY_LAUNCHER);
+//		streamintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		ComponentName cn = new ComponentName(this, StreamActivity.class);
+//		streamintent.setComponent(cn);
+//		startActivity(streamintent);
+		
 	}
 	
 	@Override
@@ -108,6 +118,7 @@ public class SensorService extends Service implements SensorEventListener {
 			Intent intent = new Intent(this, RepeatingAlarmServiceTester.class);
 			alarmManager.cancel(PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0));
 		}
+		
 		Toast.makeText(this, "Service Stopped!", Toast.LENGTH_SHORT).show();
 		Log.v(this.getClass().getName(), "Service onDestroy(). Stop AlarmManager at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
 		
@@ -126,7 +137,6 @@ public class SensorService extends Service implements SensorEventListener {
 	// HERE THEY ARE!
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		// TODO Auto-generated method stub
 		
 	}
 

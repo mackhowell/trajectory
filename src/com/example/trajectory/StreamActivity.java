@@ -1,18 +1,39 @@
 package com.example.trajectory;
 
-import static com.googlecode.javacv.cpp.opencv_core.IPL_DEPTH_8U;
-import java.io.IOException;
-import com.googlecode.javacv.FFmpegFrameRecorder;
-import com.googlecode.javacv.cpp.opencv_core.IplImage;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ImageFormat;
+import android.graphics.Paint;
+import android.graphics.RectF;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
+import android.os.Bundle;
+import android.os.PowerManager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.LinearLayout;
+
+import java.io.IOException;
+import java.nio.Buffer;
+import java.nio.ShortBuffer;
+
+import com.googlecode.javacv.FrameRecorder;
+import com.googlecode.javacv.FFmpegFrameRecorder;
+import com.googlecode.javacv.cpp.opencv_core.IplImage;
+
+import static com.googlecode.javacv.cpp.opencv_core.*;
 
 public class StreamActivity extends Activity {
 	
@@ -22,7 +43,10 @@ public class StreamActivity extends Activity {
 		- do something with repeating alarm?
 		- incorporate JAVACV stream
 	*/
+	
 	private final static String LOG_TAG = "StreamActivity";
+	
+    private PowerManager.WakeLock mWakeLock;
 	
     private int sampleAudioRateInHz = 44100;
     private int imageWidth = 320;
@@ -30,8 +54,67 @@ public class StreamActivity extends Activity {
     private int frameRate = 30;
     
     private CameraView cameraView;
+    private IplImage yuvIplimage = null;
+    
+    private LinearLayout mainLayout;
+    
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+    	
+    	super.onCreate(savedInstanceState);
+        
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setContentView(R.layout.cam_layout);
+
+        initLayout();
+//        initRecorder();
+        
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mWakeLock == null) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE); 
+            mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, LOG_TAG); 
+            mWakeLock.acquire(); 
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mWakeLock != null) {
+            mWakeLock.release();
+            mWakeLock = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+//        recording = false;
+    }
+    
 	
-    class CameraView extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback {
+    private void initLayout() {
+    	
+    	mainLayout = (LinearLayout) this.findViewById(R.id.cam_layout);
+    	
+    	cameraView = new CameraView(this);
+    	
+    	LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(imageWidth, imageHeight);
+    	mainLayout.addView(cameraView, layoutParam);
+    	Log.v(LOG_TAG, "just added cameraView to mainLayout");
+		
+	}
+
+
+	class CameraView extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback {
 
     	private boolean previewRunning = false;
     	
