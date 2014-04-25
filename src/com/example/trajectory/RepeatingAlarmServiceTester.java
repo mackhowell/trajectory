@@ -1,7 +1,6 @@
 package com.example.trajectory;
 
 import java.io.IOException;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +11,15 @@ import android.hardware.Camera.PreviewCallback;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class RepeatingAlarmServiceTester extends BroadcastReceiver {
 	
 	private final static String LOG_TAG = "RepeatingAlarmServiceTester";
+	
+	private CameraSurface cameraSurface;
+	private LinearLayout mainLayout;
 	
 	private int imageWidth = 320;
 	private int imageHeight = 240;
@@ -26,8 +29,26 @@ public class RepeatingAlarmServiceTester extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		Log.v(LOG_TAG, "HI FROM ALARM SERVICE TEST!");
 		Toast.makeText(context, "AALLLLARMMM!", Toast.LENGTH_LONG).show();
+        
+        initLayout();
 	}
 	
+	private void initLayout() {
+//		mainLayout = (LinearLayout) this.findViewById(R.id.record_layout);
+		
+		// THIS is undefined: = RepeatingAlarmServiceTester.CameraSurface(RepeatingAlarmTester)
+		cameraSurface = new CameraSurface(null);
+		
+        LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(imageWidth, imageHeight);        
+        mainLayout.addView(cameraSurface, layoutParam);
+        Log.v(LOG_TAG, "added cameraView to mainLayout");
+	}
+
+//	private LinearLayout findViewById(int recordLayout) {
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
+
 	class CameraSurface extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback {
 		
     	private boolean previewRunning = false;

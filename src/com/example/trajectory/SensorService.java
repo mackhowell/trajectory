@@ -34,10 +34,10 @@ public class SensorService extends Service implements SensorEventListener {
 	
 	AlarmManager alarmManager;
 	
-	// window manager!
-	private View myView;
-	private WindowManager.LayoutParams myParams;
-	private WindowManager myWindowManager;
+//	// window manager!
+//	private View myView;
+//	private WindowManager.LayoutParams myParams;
+//	private WindowManager myWindowManager;
 	
 	// SENSOR MANAGER
 	private SensorManager sensorManager;
@@ -50,18 +50,18 @@ public class SensorService extends Service implements SensorEventListener {
 		startService();
 		Log.v(this.getClass().getName(), "onBind(..)");
 		
-		// load the new windowManager view
-	    myView = new MyLoadView(this);
-	    myParams = new WindowManager.LayoutParams(
-	            WindowManager.LayoutParams.MATCH_PARENT, 150, 10, 10,
-	            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
-	            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-	            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
-	            PixelFormat.TRANSLUCENT);
-	    myParams.gravity = Gravity.CENTER;
-	    myParams.setTitle("Window test");
-	    myWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
-	    myWindowManager.addView(myView, myParams);
+//		// load the new windowManager view
+//	    myView = new MyLoadView(this);
+//	    myParams = new WindowManager.LayoutParams(
+//	            WindowManager.LayoutParams.MATCH_PARENT, 150, 10, 10,
+//	            WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+//	            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//	            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL,
+//	            PixelFormat.TRANSLUCENT);
+//	    myParams.gravity = Gravity.CENTER;
+//	    myParams.setTitle("Window test");
+//	    myWindowManager = (WindowManager)getSystemService(WINDOW_SERVICE);
+//	    myWindowManager.addView(myView, myParams);
 	    
 		// SENSOR MANAGER + REGISTER LISTENER!!!
 		sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
@@ -111,9 +111,9 @@ public class SensorService extends Service implements SensorEventListener {
 		Toast.makeText(this, "Service Stopped!", Toast.LENGTH_SHORT).show();
 		Log.v(this.getClass().getName(), "Service onDestroy(). Stop AlarmManager at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
 		
-		// destroy window manager
-		((WindowManager)getSystemService(WINDOW_SERVICE)).removeView(myView);
-	    myView = null;
+//		// destroy window manager
+//		((WindowManager)getSystemService(WINDOW_SERVICE)).removeView(myView);
+//	    myView = null;
 	    
 	    // deregister LISTENER!
 	    sensorManager.unregisterListener(this);
@@ -149,74 +149,37 @@ public class SensorService extends Service implements SensorEventListener {
 		
 	}
 	
-	
-	
-	
-//public class MyLoadView extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback {
-//
-//	public MyLoadView(Context context) {
-//		super(context);
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	@Override
-//	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-//			int height) {
-//		// TODO Auto-generated method stub
+//	public class MyLoadView extends View {
 //		
-//	}
-//
-//	@Override
-//	public void surfaceCreated(SurfaceHolder holder) {
-//		// TODO Auto-generated method stub
+//		private Paint mPaint;
 //		
-//	}
-//
-//	@Override
-//	public void surfaceDestroyed(SurfaceHolder holder) {
-//		// TODO Auto-generated method stub
-//		
-//	}
-//
-//	@Override
-//	public void onPreviewFrame(byte[] data, Camera camera) {
-//		// TODO Auto-generated method stub
-//		
-//	}
+//		public MyLoadView(Context context) {
+//			super(context);
+//		    mPaint = new Paint();
+//		    mPaint.setTextSize(50);
+//		    mPaint.setARGB(200, 200, 200, 200);
+//		}
 //	
-//}
-	
-	public class MyLoadView extends View {
-		
-		private Paint mPaint;
-		
-		public MyLoadView(Context context) {
-			super(context);
-		    mPaint = new Paint();
-		    mPaint.setTextSize(50);
-		    mPaint.setARGB(200, 200, 200, 200);
-		}
-	
-	    @Override
-	    protected void onDraw(Canvas canvas) {
-	        super.onDraw(canvas);
-	        canvas.drawText("test test test", 0, 100, mPaint);
-	    }
-	
-	    @Override
-	    protected void onAttachedToWindow() {
-	        super.onAttachedToWindow();
-	    }
-	
-	    @Override
-	    protected void onDetachedFromWindow() {
-	        super.onDetachedFromWindow();
-	    }
-	
-	    @Override
-	    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-	        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	    }
-	}
+//	    @Override
+//	    protected void onDraw(Canvas canvas) {
+//	        super.onDraw(canvas);
+//	        canvas.drawText("test test test", 0, 100, mPaint);
+//	    }
+//	
+//	    @Override
+//	    protected void onAttachedToWindow() {
+//	        super.onAttachedToWindow();
+//	    }
+//	
+//	    @Override
+//	    protected void onDetachedFromWindow() {
+//	        super.onDetachedFromWindow();
+//	    }
+//	
+//	    @Override
+//	    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+//	        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+//	    }
+//	}
 
 }
