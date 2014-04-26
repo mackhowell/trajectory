@@ -29,11 +29,12 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 public class SensorService extends Service implements SensorEventListener {
-	public static final int INTERVAL = 5000; //5 secs
-	public static final int FIRST_RUN = 5000; //5 secs
-	int REQUEST_CODE = 11223344;
 	
 	AlarmManager alarmManager;
+	public static boolean alarmRunning = false;
+	public static final int INTERVAL = 5000; //5 secs
+	public static final int FIRST_RUN = 0; //0 secs
+	int REQUEST_CODE = 11223344;
 	
 //	// window manager!
 //	private View myView;
@@ -84,40 +85,57 @@ public class SensorService extends Service implements SensorEventListener {
 	
 	private void startService() {
 		
-		Log.v("SensorService","HI FROM startService()!!!");
+		// alarm boolean
+//		alarmRunning = true;
 		
 		// setup Intent for alarmManager
-		Intent intent = new Intent(this, RepeatingAlarmServiceTester.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
+//		Intent intent = new Intent(this, RepeatingAlarmServiceTester.class);
+//		PendingIntent pendingIntent = PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0);
 		
 		// REPEATING ALARM SENDER
-		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-				SystemClock.elapsedRealtime() + FIRST_RUN,
-				INTERVAL,
-				pendingIntent);
+//		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+//		alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+//				SystemClock.elapsedRealtime() + FIRST_RUN,
+//				INTERVAL,
+//				pendingIntent);
 		
 		Toast.makeText(this, "Service Started.", Toast.LENGTH_SHORT).show();
-		Log.v(this.getClass().getName(), "AlarmManager started at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
+//		Log.v(this.getClass().getName(), "AlarmManager started at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
 		
 
-//		// launches the new activity StreamActivity.java
-//		Intent streamintent = new Intent();
-//		streamintent.setAction(Intent.ACTION_MAIN);
-//		streamintent.addCategory(Intent.CATEGORY_LAUNCHER);
-//		streamintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//		ComponentName cn = new ComponentName(this, StreamActivity.class);
-//		streamintent.setComponent(cn);
-//		startActivity(streamintent);
+		// launches the new activity StreamActivity.java
+//		launchStreamer();
 		
 	}
 	
+	private void launchStreamer() {
+		// launches the new activity StreamActivity.java
+		Intent streamintent = new Intent();
+		streamintent.setAction(Intent.ACTION_MAIN);
+		streamintent.addCategory(Intent.CATEGORY_LAUNCHER);
+		streamintent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		streamintent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		ComponentName cn = new ComponentName(this, StreamActivity.class);
+		streamintent.setComponent(cn);
+		
+		
+		startActivity(streamintent);
+	}
+	
+	private void closeStreamer() {
+		
+	}
+
 	@Override
 	public void onDestroy() {
-		if (alarmManager != null) {
-			Intent intent = new Intent(this, RepeatingAlarmServiceTester.class);
-			alarmManager.cancel(PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0));
-		}
+		
+		// alarm boolean
+//		alarmRunning = false;
+		
+//		if (alarmManager != null) {
+//			Intent intent = new Intent(this, RepeatingAlarmServiceTester.class);
+//			alarmManager.cancel(PendingIntent.getBroadcast(this, REQUEST_CODE, intent, 0));
+//		}
 		
 		Toast.makeText(this, "Service Stopped!", Toast.LENGTH_SHORT).show();
 		Log.v(this.getClass().getName(), "Service onDestroy(). Stop AlarmManager at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
@@ -126,7 +144,7 @@ public class SensorService extends Service implements SensorEventListener {
 //		((WindowManager)getSystemService(WINDOW_SERVICE)).removeView(myView);
 //	    myView = null;
 	    
-	    // deregister LISTENER!
+	    // unregister LISTENER!
 	    sensorManager.unregisterListener(this);
 	}
 
@@ -143,19 +161,20 @@ public class SensorService extends Service implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
-//		switch (event.sensor.getType()) {
-//		case Sensor.TYPE_LINEAR_ACCELERATION:
-//			Log.v("Accel","Z: " + event.values[2]);
-//			if (event.values[2] >= 6)  {
-////				Toast toast = Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT);
-////				toast.show();
-//			}
-//			else {
-//			}
-//			break;
-//		}
-		
-//        ServicesDemo.refreshDisplay();
+		switch (event.sensor.getType()) {
+		case Sensor.TYPE_LINEAR_ACCELERATION:
+			Log.v("Accel","Z: " + event.values[2]);
+			if (event.values[2] >= 6)  {
+				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
+				
+				launchStreamer();
+			}
+			else {
+				// boolean extra to stop activity
+
+			}
+			break;
+		}
 		
 	}
 	

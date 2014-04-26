@@ -2,6 +2,7 @@ package com.example.trajectory;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,6 +16,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -38,9 +40,9 @@ import static com.googlecode.javacv.cpp.opencv_core.*;
 public class StreamActivity extends Activity {
 	
 	/*	steps:
-		- create camera preview surfaceView
-		- launch that from SensorService
-		- do something with repeating alarm?
+		- create camera preview surfaceView -- DONE
+		- launch that from SensorService -- DONE
+		- do something with repeating alarm? -- DONE
 		- incorporate JAVACV stream
 	*/
 	
@@ -62,6 +64,7 @@ public class StreamActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
+    	
     	super.onCreate(savedInstanceState);
         
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -70,6 +73,18 @@ public class StreamActivity extends Activity {
         initLayout();
 //        initRecorder();
         
+        // KILL activity after X secs
+        CountDownTimer myTimer = new CountDownTimer(3000, 1000) {
+
+        	    public void onTick(long millisUntilFinished) {
+        	    	Log.v(LOG_TAG,"TiCk");
+        	    }
+        	    
+        	    public void onFinish() { 
+        	    	finish();
+        	    }
+        	 };
+        	 myTimer.start();
     }
     
     @Override
@@ -79,7 +94,7 @@ public class StreamActivity extends Activity {
         if (mWakeLock == null) {
             PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE); 
             mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, LOG_TAG); 
-            mWakeLock.acquire(); 
+            mWakeLock.acquire();
         }
     }
 
@@ -98,6 +113,7 @@ public class StreamActivity extends Activity {
         super.onDestroy();
 
 //        recording = false;
+
     }
     
 	
