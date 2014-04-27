@@ -118,12 +118,11 @@ public class SensorService extends Service implements SensorEventListener {
 		ComponentName cn = new ComponentName(this, StreamActivity.class);
 		streamintent.setComponent(cn);
 		
-		
 		startActivity(streamintent);
 	}
 	
 	private void closeStreamer() {
-		
+		// TODO?
 	}
 
 	@Override
@@ -160,11 +159,13 @@ public class SensorService extends Service implements SensorEventListener {
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
+		
+//		Log.v("SensorListener", "imRunning = " + StreamActivity.imRunning);
 
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_LINEAR_ACCELERATION:
 			Log.v("Accel","Z: " + event.values[2]);
-			if (event.values[2] >= 6)  {
+			if (event.values[2] >= 6 && StreamActivity.imRunning == false)  {
 				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
 				
 				launchStreamer();

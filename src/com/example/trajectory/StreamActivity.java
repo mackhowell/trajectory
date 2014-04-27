@@ -44,9 +44,12 @@ public class StreamActivity extends Activity {
 		- launch that from SensorService -- DONE
 		- do something with repeating alarm? -- DONE
 		- incorporate JAVACV stream
+		- add boolean ifRunning
 	*/
 	
 	private final static String LOG_TAG = "StreamActivity";
+	
+	static boolean imRunning = false;
 	
     private PowerManager.WakeLock mWakeLock;
 	
@@ -80,12 +83,26 @@ public class StreamActivity extends Activity {
         	    	Log.v(LOG_TAG,"TiCk");
         	    }
         	    
-        	    public void onFinish() { 
+        	    public void onFinish() {
         	    	finish();
         	    }
         	 };
         	 myTimer.start();
     }
+    
+    //------AM I RUNNING?------//
+    @Override
+    public void onStart() {
+       super.onStart();
+       imRunning = true;
+    }
+    
+    @Override
+    public void onStop() {
+       super.onStop();
+       imRunning = false;
+    }
+    //------YES AND NO------//
     
     @Override
     protected void onResume() {
