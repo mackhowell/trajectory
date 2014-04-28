@@ -55,7 +55,8 @@ public class StreamActivity extends Activity {
 	
     private PowerManager.WakeLock mWakeLock;
     
-    private String ffmpeg_link = "rtmp://mackhowell:blueberries@172.29.131.187:1935/live/test.flv";
+    private String streamName = "mack";
+    private String ffmpeg_link = "rtmp://mackhowell:blueberries@192.168.0.16:1935/live/" + streamName + ".flv";
     //private String ffmpeg_link = "rtmp://username:password@xxx.xxx.xxx.xxx:1935/live/test.flv";
     //private String ffmpeg_link = "/mnt/sdcard/new_stream.flv";
 	
