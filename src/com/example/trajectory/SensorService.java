@@ -122,7 +122,7 @@ public class SensorService extends Service implements SensorEventListener {
 	}
 	
 	private void closeStreamer() {
-		// TODO?
+		sendBroadcast(new Intent("closeStream"));
 	}
 
 	@Override
@@ -164,16 +164,17 @@ public class SensorService extends Service implements SensorEventListener {
 
 		switch (event.sensor.getType()) {
 		case Sensor.TYPE_LINEAR_ACCELERATION:
-			Log.v("Accel","Z: " + event.values[2]);
-			if (event.values[2] >= 6 && StreamActivity.imRunning == false)  {
+//			Log.v("Accel","Z: " + event.values[2]);
+			if (event.values[2] >= Math.abs(4) && StreamActivity.imRunning == false)  {
 				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
 				
 				launchStreamer();
 			}
+			
 			else {
-				// boolean extra to stop activity
-
+//				closeStreamer();
 			}
+			
 			break;
 		}
 		
