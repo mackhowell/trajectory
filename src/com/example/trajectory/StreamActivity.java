@@ -33,21 +33,19 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ShortBuffer;
 
-import com.googlecode.javacv.FrameRecorder;
-import com.googlecode.javacv.FFmpegFrameRecorder;
-import com.googlecode.javacv.cpp.opencv_core.IplImage;
+//import com.googlecode.javacv.FrameRecorder;
+//import com.googlecode.javacv.FFmpegFrameRecorder;
+//import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
-import static com.googlecode.javacv.cpp.opencv_core.*;
+import org.bytedeco.javacv.FrameRecorder;
+import org.bytedeco.javacv.FFmpegFrameRecorder;
+//import org.bytedeco.javacpp.presets.opencv_core.IplImage;
+
+//import static com.googlecode.javacv.cpp.opencv_core.*;
+//import static org.bytedeco.javacpp.presets.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_core.*;
 
 public class StreamActivity extends Activity {
-	
-	/*	steps:
-		- create camera preview surfaceView -- DONE
-		- launch that from SensorService -- DONE
-		- do something with repeating alarm? -- DONE
-		- incorporate JAVACV stream -- DONE
-		- add boolean imRunning -- DONE
-	*/
 	
 	private final static String LOG_TAG = "StreamActivity";
 	
@@ -56,7 +54,7 @@ public class StreamActivity extends Activity {
     private PowerManager.WakeLock mWakeLock;
     
     private String streamName = "mack";
-    private String ffmpeg_link = "rtmp://mackhowell:blueberries@192.168.0.16:1935/live/" + streamName + ".flv";
+    private String ffmpeg_link = "rtmp://mackhowell:blueberries@128.122.6.175:1935/live/" + streamName + ".flv";
     //private String ffmpeg_link = "rtmp://username:password@xxx.xxx.xxx.xxx:1935/live/test.flv";
     //private String ffmpeg_link = "/mnt/sdcard/new_stream.flv";
 	
