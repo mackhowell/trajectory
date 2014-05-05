@@ -54,7 +54,7 @@ public class StreamActivity extends Activity {
     private PowerManager.WakeLock mWakeLock;
     
     private String streamName = "mack";
-    private String ffmpeg_link = "rtmp://mackhowell:blueberries@128.122.6.175:1935/live/" + streamName + ".flv";
+    private String ffmpeg_link = "rtmp://mackhowell:blueberries@128.122.6.205:1935/live/" + streamName + ".flv";
     //private String ffmpeg_link = "rtmp://username:password@xxx.xxx.xxx.xxx:1935/live/test.flv";
     //private String ffmpeg_link = "/mnt/sdcard/new_stream.flv";
 	
@@ -92,17 +92,17 @@ public class StreamActivity extends Activity {
     	registerReceiver(myReceiver, new IntentFilter("closeStream"));
         
         //------KILL ME TIMER------//
-//        CountDownTimer myTimer = new CountDownTimer(10000, 1000) {
-//
-//        	    public void onTick(long millisUntilFinished) {
-//        	    	Log.v(LOG_TAG,"TiCk");
-//        	    }
-//        	    
-//        	    public void onFinish() {
-//        	    	finish();
-//        	    }
-//        	 };
-//        	 myTimer.start();
+        CountDownTimer myTimer = new CountDownTimer(30000, 1000) {
+
+        	    public void onTick(long millisUntilFinished) {
+        	    	Log.v(LOG_TAG,"TiCk");
+        	    }
+        	    
+        	    public void onFinish() {
+        	    	finish();
+        	    }
+        	 };
+        	 myTimer.start();
     	
     }
     

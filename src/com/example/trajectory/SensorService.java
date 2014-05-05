@@ -44,6 +44,7 @@ public class SensorService extends Service implements SensorEventListener {
 	// SENSOR MANAGER
 	private SensorManager sensorManager;
 	private Sensor accelerometerSensor;
+	private Sensor pressureSensor;
 	
 	@Override
 	public void onCreate() {
@@ -68,7 +69,9 @@ public class SensorService extends Service implements SensorEventListener {
 		// SENSOR MANAGER + REGISTER LISTENER!!!
 		sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 		accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
+		pressureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
 		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		sensorManager.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		
 		//List all avail sensors
 		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -163,19 +166,35 @@ public class SensorService extends Service implements SensorEventListener {
 //		Log.v("SensorListener", "imRunning = " + StreamActivity.imRunning);
 
 		switch (event.sensor.getType()) {
+		
+		//------LINEAR ACCELERATION-----//
 		case Sensor.TYPE_LINEAR_ACCELERATION:
 //			Log.v("Accel","Z: " + event.values[2]);
-			if (event.values[2] >= Math.abs(4) && StreamActivity.imRunning == false)  {
+			// was at (8)!!
+			if (event.values[2] >= Math.abs(8) && StreamActivity.imRunning == false)  {
 				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
-				
 				launchStreamer();
 			}
 			
 			else {
+				Log.v("CLOSE STREAM","CLOSING STREAM NOW!!!");
 //				closeStreamer();
 			}
 			
 			break;
+			
+			//------PRESSURE-----//
+//			case Sensor.TYPE_PRESSURE:
+//				float millibars_of_pressure = event.values[0];
+//				Log.v("MILLIBARS OF PRESSURE = ", Float.toString(millibars_of_pressure));
+//				if (event.values[0] >= 1000 && StreamActivity.imRunning == false) {
+//					Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
+//					launchStreamer();
+//				}
+//				
+//				else{
+//					closeStreamer();
+//				}
 		}
 		
 	}
