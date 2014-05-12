@@ -19,6 +19,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Environment;
 import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -37,9 +38,17 @@ import java.nio.ShortBuffer;
 //import com.googlecode.javacv.FFmpegFrameRecorder;
 //import com.googlecode.javacv.cpp.opencv_core.IplImage;
 
+
+
+
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.FrameRecorder;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 //import org.bytedeco.javacpp.presets.opencv_core.IplImage;
+
+
+
 
 //import static com.googlecode.javacv.cpp.opencv_core.*;
 //import static org.bytedeco.javacpp.presets.opencv_core.*;
@@ -54,11 +63,14 @@ public class StreamActivity extends Activity {
     private PowerManager.WakeLock mWakeLock;
     
     private String streamName = "mack";
-    private String ffmpeg_link = "rtmp://mackhowell:blueberries@128.122.6.205:1935/live/" + streamName + ".flv";
+//    pirapitinga: 192.168.1.108
+//    itp sandbox: 128.122.6.205
+    private String ffmpeg_link = "rtmp://mackhowell:blueberries@108.59.84.227:1935/live/" + streamName + ".flv";
     //private String ffmpeg_link = "rtmp://username:password@xxx.xxx.xxx.xxx:1935/live/test.flv";
     //private String ffmpeg_link = "/mnt/sdcard/new_stream.flv";
 	
     private volatile FFmpegFrameRecorder recorder;
+//    private volatile FFmpegFrameGrabber grabber;
     boolean recording = false;
     long startTime = 0;
 	
@@ -92,7 +104,7 @@ public class StreamActivity extends Activity {
     	registerReceiver(myReceiver, new IntentFilter("closeStream"));
         
         //------KILL ME TIMER------//
-        CountDownTimer myTimer = new CountDownTimer(30000, 1000) {
+        CountDownTimer myTimer = new CountDownTimer(20000, 1000) {
 
         	    public void onTick(long millisUntilFinished) {
         	    	Log.v(LOG_TAG,"TiCk");
@@ -203,6 +215,10 @@ public class StreamActivity extends Activity {
         audioRecordRunnable = new AudioRecordRunnable();
         audioThread = new Thread(audioRecordRunnable);
         
+        //FRAMEGRABBER
+//        grabber = new FFmpegFrameGrabber("/mnt/sdcard/android.3gp");
+//        grabber = new FFmpegFrameGrabber(Environment.getExternalStorageDirectory().getPath() + "/android.3gp");
+        
     }
     
     // Start the capture
@@ -212,9 +228,17 @@ public class StreamActivity extends Activity {
             startTime = System.currentTimeMillis();
             recording = true;
             audioThread.start();
+            
         } catch (FFmpegFrameRecorder.Exception e) {
             e.printStackTrace();
         }
+        
+        //FRAMEGRABBER
+//        try {
+//			grabber.start();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
     }
 
     public void stopRecording() {
@@ -231,6 +255,15 @@ public class StreamActivity extends Activity {
                 e.printStackTrace();
             }
             recorder = null;
+            
+            //FRAMEGRABBER
+//            try {
+//				grabber.stop();
+//	            grabber.release();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//            grabber = null;
         }
     }
     
@@ -455,6 +488,9 @@ public class StreamActivity extends Activity {
                     
                     // Record the image into FFmpegFrameRecorder
                     recorder.record(yuvIplimage);
+                    
+                    // FRAMEGRABBER
+//                    grabber.grab(yuvIplimage);
                     
                 } catch (FFmpegFrameRecorder.Exception e) {
                     Log.v(LOG_TAG,e.getMessage());

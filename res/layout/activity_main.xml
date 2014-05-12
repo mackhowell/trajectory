@@ -1,23 +1,94 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center" >
+    android:gravity="center"
+    android:orientation="vertical" >
 
-    <Button
-        android:layout_width="fill_parent"
+    <!--
+         <Button
+        android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:id="@+id/buttonStart"
-        android:text="Start Trajectory"></Button>
+        android:text="Start"></Button>
 
     <Button
         android:id="@+id/buttonStop"
-        android:layout_width="fill_parent"
+        android:layout_width="100dip"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="71dp"
-        android:text="Stop Trajectory" />
+        android:text="Stop" />
+    -->
     
+    <Switch
+        android:id="@+id/bigSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:background="#1A1A1A"
+        android:textOff="OFF"
+        android:textOn="ON" />
+
+    <SeekBar
+        android:id="@+id/accelerometer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/bigSwitch"
+        android:layout_margin="10dip"
+        android:layout_marginBottom="22dp"
+        android:background="#66FFCC"
+        android:progress="0" />
+
+
+    <SeekBar
+        android:id="@+id/pressure"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/accelerometer"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dip"
+        android:layout_marginTop="69dp"
+        android:background="#AA6622"
+        android:progress="0" />
+
+    <SeekBar
+        android:id="@+id/magnetometer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pressure"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dip"
+        android:layout_marginTop="69dp"
+        android:background="#CCFF66"
+        android:progress="0" />
+
+<!--     <SeekBar
+        android:id="@+id/seekBar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/seekBar1"
+        android:layout_marginTop="20dp" /> -->
+
+<!--     <SeekBar
+        android:id="@+id/seekBar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/seekBar2"
+        android:layout_marginTop="30dp" /> -->
+
+<!--     <SeekBar
+        android:id="@+id/seekBar4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/seekBar3"
+        android:layout_marginTop="26dp" /> -->
+
 </RelativeLayout>

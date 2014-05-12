@@ -45,6 +45,7 @@ public class SensorService extends Service implements SensorEventListener {
 	private SensorManager sensorManager;
 	private Sensor accelerometerSensor;
 	private Sensor pressureSensor;
+	private Sensor gyroSensor;
 	
 	@Override
 	public void onCreate() {
@@ -70,8 +71,10 @@ public class SensorService extends Service implements SensorEventListener {
 		sensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 		accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 		pressureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
+		gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
 		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		sensorManager.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		sensorManager.registerListener(this, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		
 		//List all avail sensors
 		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
@@ -157,7 +160,7 @@ public class SensorService extends Service implements SensorEventListener {
 	// HERE THEY ARE!
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
+		Log.v("ACCURACY INT","onAccuracyChanged: " + sensor + ", accuracy: " + accuracy);
 	}
 
 	@Override
@@ -171,13 +174,13 @@ public class SensorService extends Service implements SensorEventListener {
 		case Sensor.TYPE_LINEAR_ACCELERATION:
 //			Log.v("Accel","Z: " + event.values[2]);
 			// was at (8)!!
-			if (event.values[2] >= Math.abs(8) && StreamActivity.imRunning == false)  {
-				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
-				launchStreamer();
+			if (event.values[2] >= Math.abs(6) && StreamActivity.imRunning == false)  {
+//				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
+//				launchStreamer();
 			}
 			
 			else {
-				Log.v("CLOSE STREAM","CLOSING STREAM NOW!!!");
+//				Log.v("CLOSE STREAM","CLOSING STREAM NOW!!!");
 //				closeStreamer();
 			}
 			
@@ -187,14 +190,28 @@ public class SensorService extends Service implements SensorEventListener {
 //			case Sensor.TYPE_PRESSURE:
 //				float millibars_of_pressure = event.values[0];
 //				Log.v("MILLIBARS OF PRESSURE = ", Float.toString(millibars_of_pressure));
-//				if (event.values[0] >= 1000 && StreamActivity.imRunning == false) {
+//				if (event.values[0] < 1007 && StreamActivity.imRunning == false) {
 //					Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
 //					launchStreamer();
 //				}
 //				
 //				else{
-//					closeStreamer();
+////					closeStreamer();
 //				}
+//			break;
+			
+		case Sensor.TYPE_GYROSCOPE:
+			Log.v("GYRO", " X:" + event.values[0]);
+			if (event.values[0] >= Math.abs(10) && StreamActivity.imRunning == false)  {
+//				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
+				launchStreamer();
+			}
+			
+			else {
+//				Log.v("CLOSE STREAM","CLOSING STREAM NOW!!!");
+				closeStreamer();
+			}
+			break;
 		}
 		
 	}
