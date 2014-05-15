@@ -29,27 +29,17 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
-
 import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ShortBuffer;
-
 //import com.googlecode.javacv.FrameRecorder;
 //import com.googlecode.javacv.FFmpegFrameRecorder;
 //import com.googlecode.javacv.cpp.opencv_core.IplImage;
-
-
-
-
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.FrameRecorder;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
 //import org.bytedeco.javacpp.presets.opencv_core.IplImage;
-
-
-
-
 //import static com.googlecode.javacv.cpp.opencv_core.*;
 //import static org.bytedeco.javacpp.presets.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_core.*;
@@ -104,7 +94,7 @@ public class StreamActivity extends Activity {
     	registerReceiver(myReceiver, new IntentFilter("closeStream"));
         
         //------KILL ME TIMER------//
-        CountDownTimer myTimer = new CountDownTimer(20000, 1000) {
+        CountDownTimer myTimer = new CountDownTimer(10000, 1000) {
 
         	    public void onTick(long millisUntilFinished) {
         	    	Log.v(LOG_TAG,"TiCk");
@@ -185,6 +175,8 @@ public class StreamActivity extends Activity {
     	LinearLayout.LayoutParams layoutParam = new LinearLayout.LayoutParams(imageWidth, imageHeight);
     	mainLayout.addView(cameraView, layoutParam);
     	Log.v(LOG_TAG, "just added cameraView to mainLayout");
+    	
+//    	cameraView = (CameraView) this.findViewById(R.id.camera_view);
 		
 	}
     

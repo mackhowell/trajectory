@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#019fa5" >
 
     <!--
          <Button
@@ -22,26 +23,36 @@
         android:text="Stop" />
     -->
     
+    <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="-90dp"
+      android:tint="#55ff0000"
+      android:src="@drawable/trajectorylogoui"/>
+    
+    
     <Switch
         android:id="@+id/bigSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:background="#1A1A1A"
         android:textOff="OFF"
         android:textOn="ON" />
 
+    
+    <!-- ACCELEROMETER -->
     <SeekBar
         android:id="@+id/accelerometer"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_height="wrap_content"	
+        android:layout_centerInParent="true"
         android:layout_below="@+id/bigSwitch"
         android:layout_margin="20dip"
         android:layout_marginTop="100dp"
-        android:background="#66FFCC"
+        android:background="#000014"
         android:progress="0" />
     
 	        <TextView
@@ -54,17 +65,31 @@
 	        android:layout_below="@+id/accelerometer"
 	        android:layout_marginLeft="20dp"
 	        android:layout_marginTop="-80dp" />
+	        
+ 			<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/accelerometer"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="-80dp"
+	        android:text= "Acceleration" />
+ 			
 
 
+	<!-- PRESSURE -->
     <SeekBar
         android:id="@+id/pressure"
         android:layout_width="fill_parent"
+        android:layout_centerInParent="true"
         android:layout_height="wrap_content"
         android:layout_below="@+id/accelerometer"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dip"
         android:layout_marginTop="100dp"
-        android:background="#AA6622"
+        android:background="#000033"
         android:progress="0" />
     
     		<TextView
@@ -77,16 +102,30 @@
 	        android:layout_below="@+id/pressure"
 	        android:layout_marginLeft="20dp"
 	        android:layout_marginTop="-80dp" />
+    		
+    		<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/pressure"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="-80dp"
+	        android:text= "Pressure" />
 
+    		
+    <!-- MAGNETOMETER -->
     <SeekBar
         android:id="@+id/magnetometer"
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pressure"
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dip"
         android:layout_marginTop="100dp"
-        android:background="#CCFF66"
+        android:background="#000052"
         android:progress="0" />
     
     		<TextView
@@ -99,40 +138,101 @@
 	        android:layout_below="@+id/magnetometer"
 	        android:layout_marginLeft="20dp"
 	        android:layout_marginTop="-80dp" />
+    		
+			<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/magnetometer"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="-80dp"
+	        android:text= "Gyroscope Y axis" />
 
-<!--     <SeekBar
-        android:id="@+id/seekBar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/seekBar1"
-        android:layout_marginTop="20dp" /> -->
 
-<!--     <SeekBar
-        android:id="@+id/seekBar3"
-        android:layout_width="match_parent"
+    <!-- LIGHT -->
+    <SeekBar
+        android:id="@+id/light"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/seekBar2"
-        android:layout_marginTop="30dp" /> -->
+        android:layout_below="@+id/magnetometer"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dip"
+        android:layout_marginTop="100dp"
+        android:background="#191975"
+        android:progress="0" />
+    
+    		<TextView
+	        android:id="@+id/lightProgress"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/light"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginTop="-80dp" />
+    		
+			<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/light"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="-80dp"
+	        android:text= "Light" />
+			
+			
+	<!-- SIGNIFICAN MOTION -->
+    <SeekBar
+        android:id="@+id/significantMotion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/light"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dip"
+        android:layout_marginTop="100dp"
+        android:background="#6666A3"
+        android:progress="0" />
+    
+    		<TextView
+	        android:id="@+id/significantMotionProgress"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/significantMotion"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginTop="-80dp" />
+    		
+			<TextView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:textColor="#000099"
+	        android:textSize="20sp"
+	        android:layout_below="@+id/significantMotion"
+	        android:layout_marginRight="20dp"
+	        android:layout_marginTop="-80dp"
+	        android:text= "Signicant Motion" />
+			
+			
 
-<!--     <SeekBar
-        android:id="@+id/seekBar4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/seekBar3"
-        android:layout_marginTop="26dp" /> -->
-        
+			
+			
         
         <Button
 		android:id="@+id/buttonSet"
         android:layout_width="70dip"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/magnetometerProgress"
+        android:layout_below="@+id/significantMotion"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="100dp"
-        android:layout_marginBottom="100dp"
         android:text="SET" />
 
 </RelativeLayout>

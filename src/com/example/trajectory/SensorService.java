@@ -3,9 +3,11 @@ package com.example.trajectory;
 import java.util.List;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
@@ -30,11 +32,11 @@ import android.widget.Toast;
 
 public class SensorService extends Service implements SensorEventListener {
 	
-	AlarmManager alarmManager;
-	public static boolean alarmRunning = false;
-	public static final int INTERVAL = 5000; //5 secs
-	public static final int FIRST_RUN = 0; //0 secs
-	int REQUEST_CODE = 11223344;
+//	AlarmManager alarmManager;
+//	public static boolean alarmRunning = false;
+//	public static final int INTERVAL = 5000; //5 secs
+//	public static final int FIRST_RUN = 0; //0 secs
+//	int REQUEST_CODE = 11223344;
 	
 //	// window manager!
 //	private View myView;
@@ -46,6 +48,10 @@ public class SensorService extends Service implements SensorEventListener {
 	private Sensor accelerometerSensor;
 	private Sensor pressureSensor;
 	private Sensor gyroSensor;
+	private Sensor lightSensor;
+	
+	// Set Values From Seekbar
+	public static int setMotion = 0;
 	
 	@Override
 	public void onCreate() {
@@ -72,15 +78,23 @@ public class SensorService extends Service implements SensorEventListener {
 		accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION);
 		pressureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE);
 		gyroSensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+		lightSensor = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
 		sensorManager.registerListener(this, accelerometerSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		sensorManager.registerListener(this, pressureSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		sensorManager.registerListener(this, gyroSensor, SensorManager.SENSOR_DELAY_NORMAL);
+		sensorManager.registerListener(this, lightSensor, SensorManager.SENSOR_DELAY_NORMAL);
 		
 		//List all avail sensors
 		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ALL);
 			for (Sensor sensor : sensors) {
 		        Log.v("Sensors", "" + sensor.getName());
 		    }
+			
+		// intent for accelerometer set value from seekbar
+			IntentFilter accelerometerFilter = new IntentFilter();
+			accelerometerFilter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+		    this.registerReceiver(null, accelerometerFilter);
+
 	}
 	
 	@Override
@@ -107,10 +121,6 @@ public class SensorService extends Service implements SensorEventListener {
 		
 		Toast.makeText(this, "Service Started.", Toast.LENGTH_SHORT).show();
 //		Log.v(this.getClass().getName(), "AlarmManager started at " + new java.sql.Timestamp(System.currentTimeMillis()).toString());
-		
-
-		// launches the new activity StreamActivity.java
-//		launchStreamer();
 		
 	}
 	
@@ -166,6 +176,25 @@ public class SensorService extends Service implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		
+		//// ----- Get Values From Seek Bar ----- ////
+//		int setAccel = getIntent().getIntExtra("AccelerometerValue");
+//		Log.v("SeekBar", "SENT FROM SEEKBAR!! " + );
+		
+		// broadcast receiver
+//		final BroadcastReceiver accelerometerReceiver = new BroadcastReceiver() {
+//			   @Override
+//			   public void onReceive(Context context, Intent intent) {
+//			      String action = intent.getAction();
+//			      if(action.equals("android.intent.action.ACCELEROMETER_VALUE")){
+//			        setMotion = intent.getIntExtra("AccelerometerValue", 0);
+//			        Log.v("SeekBar", "SENT FROM SEEKBAR!! " + setMotion);
+//			      }
+////			      else if(action.equals(android.telephony.TelephonyManager.ACTION_PHONE_STATE_CHANGED)){
+////			           //action for phone state changed
+////			      }     
+//			   }
+//			};
+		
 //		Log.v("SensorListener", "imRunning = " + StreamActivity.imRunning);
 
 		switch (event.sensor.getType()) {
@@ -174,9 +203,9 @@ public class SensorService extends Service implements SensorEventListener {
 		case Sensor.TYPE_LINEAR_ACCELERATION:
 //			Log.v("Accel","Z: " + event.values[2]);
 			// was at (8)!!
-			if (event.values[2] >= Math.abs(6) && StreamActivity.imRunning == false)  {
+			if (event.values[2] >= Math.abs(8) && StreamActivity.imRunning == false)  {
 //				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
-//				launchStreamer();
+				launchStreamer();
 			}
 			
 			else {
@@ -190,6 +219,10 @@ public class SensorService extends Service implements SensorEventListener {
 //			case Sensor.TYPE_PRESSURE:
 //				float millibars_of_pressure = event.values[0];
 //				Log.v("MILLIBARS OF PRESSURE = ", Float.toString(millibars_of_pressure));
+			
+//			 Try and get just altitude
+//			float altitude = getAltitude(sensorManager.PRESSURE_STANDARD_ATMOSPHERE, Sensor.TYPE_PRESSURE);
+			
 //				if (event.values[0] < 1007 && StreamActivity.imRunning == false) {
 //					Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
 //					launchStreamer();
@@ -200,18 +233,33 @@ public class SensorService extends Service implements SensorEventListener {
 //				}
 //			break;
 			
-		case Sensor.TYPE_GYROSCOPE:
-			Log.v("GYRO", " X:" + event.values[0]);
-			if (event.values[0] >= Math.abs(10) && StreamActivity.imRunning == false)  {
-//				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
-				launchStreamer();
-			}
+			//------GYROSCOPE-----//
+//		case Sensor.TYPE_GYROSCOPE:
+//			Log.v("GYRO", " X:" + event.values[0]);
+//			if (event.values[0] >= Math.abs(10) && StreamActivity.imRunning == false)  {
+////				Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
+//				launchStreamer();
+//			}
+//			
+//			else {
+//				closeStreamer();
+//			}
+//			break;
 			
-			else {
-//				Log.v("CLOSE STREAM","CLOSING STREAM NOW!!!");
-				closeStreamer();
-			}
-			break;
+			//------LIGHT-----//
+//					case Sensor.TYPE_LIGHT:
+////						Log.v("Accel","Z: " + event.values[2]);
+//						if (event.values[0] >= Math.abs(3) && StreamActivity.imRunning == false)  {
+////							Toast.makeText(this, "YES IM HERE", Toast.LENGTH_SHORT).show();
+////							launchStreamer();
+//						}
+//						
+//						else {
+////							Log.v("CLOSE STREAM","CLOSING STREAM NOW!!!");
+////							closeStreamer();
+//						}
+//						
+//						break;
 		}
 		
 	}

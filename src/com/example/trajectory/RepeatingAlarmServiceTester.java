@@ -40,14 +40,14 @@ public class RepeatingAlarmServiceTester extends BroadcastReceiver {
 //		streamIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //		context.startActivity(streamIntent);
 		
-		if(SensorService.alarmRunning == false){
-        Intent i = new Intent();
-        i.setClassName("com.example.trajectory", "com.example.trajectory.StreamActivity");
-//        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-        context.startActivity(i);
-		}
+//		if(SensorService.alarmRunning == false){
+//        Intent i = new Intent();
+//        i.setClassName("com.example.trajectory", "com.example.trajectory.StreamActivity");
+////        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+////        i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+//        context.startActivity(i);
+//		}
         
 	}
 }
