@@ -2,14 +2,19 @@ package com.example.trajectory;
 
 import java.util.List;
 
+import com.example.trajectory.SensorService.LocalBinder;
+
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -43,8 +48,10 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 	TextView lightProg;
 	TextView significantMotionProg;
 	
-	
     Button buttonSet;
+    
+    SensorService mService;
+    boolean mBound = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -199,6 +206,51 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
         			});
 
     }
+    
+    
+    
+    
+    
+    public void onStart() {
+    	super.onStart();
+//    	bind to SensorService
+    	Intent intent = new Intent(this, SensorService.class);
+    	bindService (intent, mConnection, Context.BIND_AUTO_CREATE);
+    	
+    }
+    
+    public void onStop() {
+    	super.onStop();
+    	if (mBound) {
+    		unbindService(mConnection);
+    		mBound = false;
+    	}
+    }
+    
+    /**------ Defines callbacks for service binding, passed to bindService() -------*/
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            LocalBinder binder = (LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
+
+    
+    
+    
+    
+    
+    
 
     public void onClick(View view) {
         switch (view.getId()) {

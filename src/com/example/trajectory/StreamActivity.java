@@ -26,12 +26,16 @@ import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
 import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.ShortBuffer;
+
 //import com.googlecode.javacv.FrameRecorder;
 //import com.googlecode.javacv.FFmpegFrameRecorder;
 //import com.googlecode.javacv.cpp.opencv_core.IplImage;
@@ -39,6 +43,7 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FrameGrabber.Exception;
 import org.bytedeco.javacv.FrameRecorder;
 import org.bytedeco.javacv.FFmpegFrameRecorder;
+
 //import org.bytedeco.javacpp.presets.opencv_core.IplImage;
 //import static com.googlecode.javacv.cpp.opencv_core.*;
 //import static org.bytedeco.javacpp.presets.opencv_core.*;
@@ -55,7 +60,8 @@ public class StreamActivity extends Activity {
     private String streamName = "mack";
 //    pirapitinga: 192.168.1.108
 //    itp sandbox: 128.122.6.205
-    private String ffmpeg_link = "rtmp://mackhowell:blueberries@108.59.84.227:1935/live/" + streamName + ".flv";
+//    google server: 108.59.84.227
+    private String ffmpeg_link = "rtmp://mackhowell:blueberries@128.122.6.175:1935/live/" + streamName + ".flv";
     //private String ffmpeg_link = "rtmp://username:password@xxx.xxx.xxx.xxx:1935/live/test.flv";
     //private String ffmpeg_link = "/mnt/sdcard/new_stream.flv";
 	
@@ -82,6 +88,11 @@ public class StreamActivity extends Activity {
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	
+    	//Remove title bar
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //Remove notification bar
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     	
     	super.onCreate(savedInstanceState);
         
@@ -192,7 +203,10 @@ public class StreamActivity extends Activity {
         
         recorder = new FFmpegFrameRecorder(ffmpeg_link, imageWidth, imageHeight, 1);
         Log.v(LOG_TAG, "FFmpegFrameRecorder: " + ffmpeg_link + " imageWidth: " + imageWidth + " imageHeight " + imageHeight);
-
+        
+        // H264 TO RECORD STREAM
+        recorder.setVideoCodec(28);
+        
         recorder.setFormat("flv");
         Log.v(LOG_TAG, "recorder.setFormat(\"flv\")");
         

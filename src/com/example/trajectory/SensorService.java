@@ -17,6 +17,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.app.AlarmManager;
@@ -52,6 +53,9 @@ public class SensorService extends Service implements SensorEventListener {
 	
 	// Set Values From Seekbar
 	public static int setMotion = 0;
+	
+//	Binder to get seekbar value
+	final IBinder myBinder = new LocalBinder();
 	
 	@Override
 	public void onCreate() {
@@ -97,10 +101,18 @@ public class SensorService extends Service implements SensorEventListener {
 
 	}
 	
+    public class LocalBinder extends Binder {
+        SensorService getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return SensorService.this;
+        }
+    }
+
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		Log.v(this.getClass().getName(), "onBind(..)");
-		return null;
+		return myBinder;
 	}
 	
 	private void startService() {
